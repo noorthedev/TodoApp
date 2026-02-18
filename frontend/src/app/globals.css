@@ -1,0 +1,291 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --primary: #3b82f6;
+  --primary-hover: #2563eb;
+  --success: #10b981;
+  --bg-site: #f8fafc;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --card-bg: #ffffff;
+  --border-color: #f1f5f9;
+  --btn-secondary: #6c757d;
+  --btn-danger: #dc3545;
+  --feature-text: #475569;
+  --hover-bg: #eff6ff;
+}
+
+.dark {
+  --primary: #60a5fa;
+  --primary-hover: #3b82f6;
+  --success: #34d399;
+  --bg-site: #0f172a;
+  --text-main: #f1f5f9;
+  --text-muted: #94a3b8;
+  --card-bg: #1e293b;
+  --border-color: #334155;
+  --btn-secondary: #64748b;
+  --btn-danger: #ef4444;
+  --feature-text: #cbd5e1;
+  --hover-bg: #1e3a5f;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-site);
+  font-family: 'Inter', -apple-system, sans-serif;
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Home Page Container */
+.home-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+/* Card Design */
+.main-card {
+  max-width: 480px;
+  width: 100%;
+  background: var(--card-bg);
+  padding: 3rem 2rem;
+  border-radius: 20px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  border: 1px solid var(--border-color);
+}
+
+.title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.025em;
+}
+
+.title span {
+  color: var(--primary);
+}
+
+.subtitle {
+  color: var(--text-muted);
+  font-size: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+/* Buttons */
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2.5rem;
+}
+
+.btn {
+  padding: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  color: var(--primary);
+  border: 2px solid var(--primary);
+}
+
+.btn-outline:hover {
+  background-color: var(--hover-bg);
+}
+
+/* Features Section */
+.features-box {
+  text-align: left;
+  background-color: var(--bg-site);
+  padding: 1.5rem;
+  border-radius: 14px;
+}
+
+.feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  color: var(--feature-text);
+  font-size: 0.9rem;
+}
+
+.feature-item {
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+}
+
+.checkmark {
+  color: var(--success);
+  margin-right: 12px;
+  font-weight: bold;
+}
+
+/* Responsiveness */
+@media (max-width: 480px) {
+  .main-card {
+    padding: 2rem 1.5rem;
+  }
+  .title {
+    font-size: 1.75rem;
+  }
+}
+
+/* Auth Specific Styles */
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background-color: var(--bg-site);
+}
+
+.auth-card {
+  max-width: 420px;
+  width: 100%;
+  background: var(--card-bg);
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-color);
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.auth-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+}
+
+.auth-subtitle {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.auth-footer {
+  margin-top: 2rem;
+  text-align: center;
+  border-top: 1px solid var(--border-color);
+  padding-top: 1.5rem;
+}
+
+.link-text {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.link-text:hover {
+  text-decoration: underline;
+}
+
+.back-link {
+  display: block;
+  margin-top: 1rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.back-link:hover {
+  color: var(--text-main);
+}
+
+/* Button Component Styles */
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color 0.2s, transform 0.1s;
+  font-family: inherit;
+}
+
+.btn:hover:not(.btn-disabled) {
+  transform: translateY(-1px);
+}
+
+.btn:active:not(.btn-disabled) {
+  transform: translateY(0);
+}
+
+.btn:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover:not(.btn-disabled) {
+  background-color: var(--primary-hover);
+}
+
+.btn-secondary {
+  background-color: var(--btn-secondary);
+  color: white;
+}
+
+.btn-secondary:hover:not(.btn-disabled) {
+  opacity: 0.9;
+}
+
+.btn-danger {
+  background-color: var(--btn-danger);
+  color: white;
+}
+
+.btn-danger:hover:not(.btn-disabled) {
+  opacity: 0.9;
+}
+
+.btn-success {
+  background-color: var(--success);
+  color: white;
+}
+
+.btn-success:hover:not(.btn-disabled) {
+  opacity: 0.9;
+}
+
+.btn-disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
