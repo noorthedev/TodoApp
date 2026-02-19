@@ -5,8 +5,9 @@ import axios, {
   InternalAxiosRequestConfig,
 } from "axios";
 
+
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+  process.env.NEXT_PUBLIC_API_BASE_URL || "https://rajput66-phase2-todoapp.hf.space";
 
 const apiClient: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
