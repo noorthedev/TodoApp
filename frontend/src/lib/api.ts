@@ -43,7 +43,7 @@ const apiClient: AxiosInstance = axios.create({
 export default apiClient;                                                                                                                                       
  // Placeholder for API client functions                                                                                                                         
  export const api = {};
-=======
+
 import axios, { AxiosInstance, AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
