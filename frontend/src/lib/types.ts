@@ -53,3 +53,21 @@ export interface TaskList {
 export interface ErrorResponse {
   detail: string;
 }
+
+// Chat types
+export interface ChatMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: Date;
+}
+
+export interface ChatRequest {
+  message: string;
+  conversation_id?: number;
+}
+
+export interface ChatResponse {
+  response: string;
+  conversation_id: number;
+}

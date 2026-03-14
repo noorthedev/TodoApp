@@ -1,122 +1,93 @@
-# Todo Full-Stack Web Application Constitution
-<!-- Hackathon Phase-2: Multi-user Todo Web Application -->
+# Todo AI Chatbot Constitution
+<!-- Hackathon Phase-III: AI-Powered Task Management with MCP Tools -->
 
 <!--
 ═══════════════════════════════════════════════════════════════════════════════
 CONSTITUTION SYNC IMPACT REPORT
 ═══════════════════════════════════════════════════════════════════════════════
 
-Validation Date: 2026-02-15
-Constitution Version: 1.0.1 (patch)
-Action: Minor update to align with user input and refresh date
+Validation Date: 2026-02-19
+Constitution Version: 2.0.0 (major)
+Action: Major architectural shift from Phase-II to Phase-III
 
-VALIDATION SUMMARY:
-- Constitution already complete and fully aligned with project requirements
-- All 5 core principles properly defined with requirements and rationale
-- Technical standards comprehensive (API, Authentication, Database, Code Quality)
-- Technology constraints clearly specified
-- Success criteria measurable and testable
-- Governance section complete with amendment process
+VERSION CHANGE RATIONALE:
+- MAJOR bump (1.0.1 → 2.0.0) due to backward-incompatible architectural changes
+- Fundamental shift from traditional CRUD web app to AI agent-driven system
+- New technology stack: OpenAI Agents SDK, MCP SDK, ChatKit frontend
+- New architectural paradigm: stateless server, tool-driven execution
+- Principles redefined to support agent-based architecture
 
-TEMPLATE CONSISTENCY CHECK:
-✅ .specify/templates/spec-template.md
-   - User story prioritization aligns with spec-driven principle
-   - Acceptance criteria format supports testability requirements
-   - Edge cases section supports production-oriented development
+MODIFIED PRINCIPLES:
+1. Functional Correctness Across All Layers → Stateless Server Architecture
+2. Security-First Design → Security-First Design (retained, updated for MCP)
+3. Clear Separation of Concerns → Tool-Driven Execution Pattern
+4. Spec-Driven Development → Agent-Database Separation (new focus)
+5. Production-Oriented Development → Database as Single Source of Truth (new)
 
-✅ .specify/templates/plan-template.md
-   - Constitution Check gate present (line 30-34)
-   - Technical context aligns with technology constraints
-   - Project structure options match stack separation principles
+ADDED SECTIONS:
+- MCP Tool Standards
+- Agent Integration Standards
+- Conversation State Management
+- OpenAI Agents SDK requirements
 
-✅ .specify/templates/tasks-template.md
-   - Task organization by user story supports spec-driven workflow
-   - Parallel execution markers align with efficiency principles
-   - Test-first approach supports quality standards
+REMOVED SECTIONS:
+- Next.js specific frontend standards (replaced with ChatKit)
+- Traditional CRUD API patterns (replaced with tool-driven patterns)
 
-✅ CLAUDE.md (project instructions)
-   - Specialized agent usage aligns with separation of concerns
-   - Authentication flow documentation matches security-first principle
-   - PHR and ADR requirements support governance standards
-
-PRINCIPLES VALIDATED:
-1. Functional Correctness Across All Layers - Complete
-2. Security-First Design - Complete
-3. Clear Separation of Concerns - Complete
-4. Spec-Driven Development - Complete
-5. Production-Oriented Development - Complete
-
-FOLLOW-UP ACTIONS:
-None required - constitution is complete and all dependent artifacts are aligned.
-
-═══════════════════════════════════════════════════════════════════════════════
--->
-
-<!--
-═══════════════════════════════════════════════════════════════════════════════
-CONSTITUTION SYNC IMPACT REPORT
-═══════════════════════════════════════════════════════════════════════════════
-
-Validation Date: 2026-02-15
-Constitution Version: 1.0.1 (patch)
-Action: Minor update to align with user input and refresh date
-
-VALIDATION SUMMARY:
-- Constitution already complete and fully aligned with project requirements
-- All 5 core principles properly defined with requirements and rationale
-- Technical standards comprehensive (API, Authentication, Database, Code Quality)
-- Technology constraints clearly specified
-- Success criteria measurable and testable
-- Governance section complete with amendment process
+TECHNOLOGY CHANGES:
+- Frontend: Next.js 16+ → OpenAI ChatKit
+- AI Layer: None → OpenAI Agents SDK
+- MCP Layer: None → Official MCP SDK
+- Backend: FastAPI (retained)
+- Database: Neon PostgreSQL (retained)
+- Auth: Better Auth JWT (retained)
 
 TEMPLATE CONSISTENCY CHECK:
-✅ .specify/templates/spec-template.md
-   - User story prioritization aligns with spec-driven principle
-   - Acceptance criteria format supports testability requirements
-   - Edge cases section supports production-oriented development
+⚠ .specify/templates/spec-template.md
+   - Requires update: Add MCP tool specification sections
+   - Requires update: Add agent interaction acceptance criteria patterns
 
-✅ .specify/templates/plan-template.md
-   - Constitution Check gate present (line 30-34)
-   - Technical context aligns with technology constraints
-   - Project structure options match stack separation principles
+⚠ .specify/templates/plan-template.md
+   - Requires update: Add MCP architecture decision sections
+   - Requires update: Add agent-tool integration planning guidance
 
-✅ .specify/templates/tasks-template.md
-   - Task organization by user story supports spec-driven workflow
-   - Parallel execution markers align with efficiency principles
-   - Test-first approach supports quality standards
+⚠ .specify/templates/tasks-template.md
+   - Requires update: Add MCP tool implementation task patterns
+   - Requires update: Add agent integration testing task types
 
-✅ CLAUDE.md (project instructions)
-   - Specialized agent usage aligns with separation of concerns
-   - Authentication flow documentation matches security-first principle
-   - PHR and ADR requirements support governance standards
-
-PRINCIPLES VALIDATED:
-1. Functional Correctness Across All Layers - Complete
-2. Security-First Design - Complete
-3. Clear Separation of Concerns - Complete
-4. Spec-Driven Development - Complete
-5. Production-Oriented Development - Complete
+⚠ CLAUDE.md (project instructions)
+   - Requires update: Add MCP-specific agent usage guidelines
+   - Requires update: Update technology stack references
+   - Requires update: Add stateless architecture patterns
 
 FOLLOW-UP ACTIONS:
-None required - constitution is complete and all dependent artifacts are aligned.
+1. Update all template files to reflect Phase-III architecture
+2. Create ADR for stateless architecture decision
+3. Create ADR for MCP tool integration approach
+4. Update CLAUDE.md with Phase-III specific agent guidelines
+5. Document migration path from Phase-II to Phase-III
 
 ═══════════════════════════════════════════════════════════════════════════════
 -->
 
 ## Core Principles
 
-### I. Functional Correctness Across All Layers
-Every component—frontend, backend, and database—must function correctly in isolation and integration. All features must be testable, verifiable, and meet acceptance criteria before being considered complete.
+### I. Stateless Server Architecture
+The server must maintain no in-memory state for conversations or agent interactions. All state must be persisted to the database immediately. This ensures scalability, reliability, and enables horizontal scaling.
 
 **Requirements:**
-- All API endpoints return correct responses for valid and invalid inputs
-- Frontend components render correctly and handle all user interactions
-- Database operations maintain data integrity and consistency
-- Integration between layers works seamlessly
-- Error states are handled gracefully at every layer
+- No in-memory conversation history or chat state
+- All messages persisted to database before processing
+- Agent interactions are stateless (each request is independent)
+- Server can be restarted without losing conversation context
+- Multiple server instances can handle requests for the same user
+- Database is the single source of truth for all state
+
+**Rationale:**
+Stateless architecture enables horizontal scaling, simplifies deployment, prevents data loss on server restart, and ensures consistent behavior across distributed systems.
 
 ### II. Security-First Design
-Security is not optional. All authentication, authorization, and data handling must follow industry best practices and be implemented correctly from the start.
+Security is not optional. All authentication, authorization, and data handling must follow industry best practices and be implemented correctly from the start. MCP tools must enforce security boundaries.
 
 **Requirements:**
 - JWT-based authentication using Better Auth
@@ -125,58 +96,65 @@ Security is not optional. All authentication, authorization, and data handling m
 - User data must be strictly isolated per user
 - No secrets or credentials hardcoded in source code
 - All secrets stored in `.env` files (excluded from version control)
-- Input validation on both frontend and backend
-- Protection against common vulnerabilities (XSS, SQL injection, CSRF)
+- Input validation on all API endpoints and MCP tools
+- Protection against common vulnerabilities (XSS, SQL injection, CSRF, IDOR)
+- MCP tools must validate user ownership before operations
+- Agent must not bypass authorization checks
 
-### III. Clear Separation of Concerns
-Each layer of the stack has distinct responsibilities. Frontend handles presentation and user interaction, backend handles business logic and data access, database handles persistence.
+**Rationale:**
+Security vulnerabilities in AI-powered systems can have amplified impact. MCP tools provide direct database access patterns that require strict authorization enforcement.
 
-**Layer Responsibilities:**
-- **Frontend (Next.js)**: UI rendering, user interaction, client-side routing, API consumption
-- **Backend (FastAPI)**: RESTful API endpoints, business logic, authentication/authorization, data validation
-- **Database (Neon PostgreSQL)**: Data persistence, relationships, constraints, queries
-- **ORM (SQLModel)**: Database model definitions, type safety, query building
-
-**Boundaries:**
-- Frontend never directly accesses the database
-- Backend never contains UI logic
-- Database logic stays in SQLModel models and migrations
-- Authentication logic centralized in Better Auth integration
-
-### IV. Spec-Driven Development
-All features begin with specifications. Implementation follows the spec → plan → tasks → implement → test workflow. No code is written without clear requirements and acceptance criteria.
-
-**Workflow:**
-1. **Spec**: Define requirements, acceptance criteria, constraints
-2. **Plan**: Design architecture, identify decisions, plan implementation
-3. **Tasks**: Break down into testable, dependency-ordered tasks
-4. **Implement**: Execute tasks following the plan
-5. **Test**: Verify against acceptance criteria
-
-**Documentation:**
-- All features documented in `specs/<feature>/spec.md`
-- Architecture decisions in `specs/<feature>/plan.md`
-- Tasks in `specs/<feature>/tasks.md`
-- Significant decisions in `history/adr/`
-- All AI interactions in `history/prompts/`
-
-### V. Production-Oriented Development
-Code is written for production from day one. This means proper error handling, logging, environment configuration, and deployment readiness.
+### III. Tool-Driven Execution Pattern
+All task operations must be executed through MCP tools. The AI agent must not directly access the database or implement business logic. Tools provide the interface between agent intent and system actions.
 
 **Requirements:**
-- Environment variables for all configuration
-- Proper error handling with meaningful messages
-- HTTP status codes follow standards
-- Logging for debugging and monitoring
-- Code follows framework best practices
-- Performance considerations (database queries, API response times)
-- Responsive design for desktop and mobile
+- All CRUD operations on tasks implemented as MCP tools
+- Tools have strict input/output schemas (Pydantic models)
+- Agent calls tools with structured parameters
+- Tools enforce authorization and validation
+- Tools return structured responses (success/error)
+- No direct database access from agent code
+- Tool implementations are testable independently
+- Tool catalog is discoverable by the agent
+
+**Rationale:**
+Tool-driven architecture provides clear separation of concerns, enables independent testing, enforces security boundaries, and makes agent behavior auditable and controllable.
+
+### IV. Agent-Database Separation
+The AI agent must never directly access the database. All data operations must go through MCP tools that enforce authorization, validation, and business rules.
+
+**Requirements:**
+- Agent code has no database connection or ORM imports
+- All database operations encapsulated in MCP tools
+- Tools enforce per-user data isolation
+- Tools validate all inputs before database operations
+- Agent receives only structured tool responses
+- Database schema changes do not affect agent code
+- Tools provide abstraction layer for data access
+
+**Rationale:**
+Separation prevents the agent from bypassing security checks, ensures consistent authorization enforcement, enables independent evolution of agent and database layers, and makes the system more maintainable.
+
+### V. Database as Single Source of Truth
+All application state—tasks, conversations, messages, user data—must be persisted in the database. No critical state exists only in memory or external systems.
+
+**Requirements:**
+- All conversations stored in database with user_id
+- All messages (user and assistant) persisted immediately
+- Task operations persist before returning success
+- No caching of critical state in memory
+- Database transactions ensure consistency
+- State can be fully reconstructed from database
+- Audit trail for all state changes
+
+**Rationale:**
+Database as single source of truth ensures data durability, enables recovery from failures, supports debugging and auditing, and allows multiple server instances to share state.
 
 ## Technical Standards
 
 ### API Design Standards
 - **RESTful Conventions**: Use standard HTTP methods (GET, POST, PUT, DELETE)
-- **Resource Naming**: Plural nouns for collections (`/tasks`, `/users`)
+- **Resource Naming**: Plural nouns for collections (`/tasks`, `/conversations`)
 - **Status Codes**:
   - 200 OK (success)
   - 201 Created (resource created)
@@ -188,6 +166,33 @@ Code is written for production from day one. This means proper error handling, l
 - **Response Format**: Consistent JSON structure
 - **Error Format**: `{"detail": "error message"}` or structured error objects
 
+### MCP Tool Standards
+- **Tool Definition**: Each tool has clear name, description, and schema
+- **Input Schema**: Pydantic models with strict validation
+- **Output Schema**: Structured responses (success/error with data)
+- **Authorization**: Every tool validates user ownership
+- **Error Handling**: Tools return structured errors, never raise exceptions to agent
+- **Idempotency**: Tools should be idempotent where possible
+- **Atomicity**: Database operations in tools use transactions
+- **Discoverability**: Tool catalog available to agent at runtime
+
+### Agent Integration Standards
+- **OpenAI Agents SDK**: Use official SDK for agent implementation
+- **Tool Calling**: Agent uses function calling to invoke MCP tools
+- **Context Management**: Agent receives conversation history from database
+- **Response Streaming**: Support streaming responses to frontend
+- **Error Recovery**: Agent handles tool errors gracefully
+- **Prompt Engineering**: System prompts define agent behavior and constraints
+- **Token Management**: Monitor and optimize token usage
+
+### Conversation State Management
+- **Persistence**: All messages saved to database immediately
+- **Retrieval**: Conversation history loaded from database per request
+- **User Isolation**: Conversations filtered by user_id
+- **Message Format**: Structured format (role, content, timestamp, metadata)
+- **Context Window**: Manage conversation length for token limits
+- **Cleanup**: Archive or delete old conversations per retention policy
+
 ### Authentication Standards
 - **Better Auth Integration**: Use Better Auth for user management
 - **JWT Tokens**: Issue JWT tokens on successful authentication
@@ -195,6 +200,7 @@ Code is written for production from day one. This means proper error handling, l
 - **Token Verification**: Backend verifies signature using shared secret
 - **User Identity**: Extract user ID/email from verified token
 - **Session Management**: Handle token expiration and refresh
+- **MCP Tool Auth**: Tools receive authenticated user context
 
 ### Database Standards
 - **SQLModel Models**: All database entities defined as SQLModel classes
@@ -203,37 +209,89 @@ Code is written for production from day one. This means proper error handling, l
 - **Constraints**: Add NOT NULL, UNIQUE, CHECK constraints where appropriate
 - **Migrations**: Track schema changes (manual or automated)
 - **Queries**: Use SQLModel query API, avoid raw SQL unless necessary
+- **Async Operations**: Use async database connections for performance
 
 ### Code Quality Standards
-- **Next.js Best Practices**:
-  - Use App Router (not Pages Router)
-  - Server Components by default, Client Components when needed
-  - Proper data fetching patterns
-  - File-based routing
 - **FastAPI Best Practices**:
   - Pydantic models for request/response validation
   - Dependency injection for database sessions
   - Async/await for I/O operations
   - Proper exception handling
+- **MCP Tool Best Practices**:
+  - One tool per operation (create_task, update_task, etc.)
+  - Clear naming conventions
+  - Comprehensive input validation
+  - Structured error responses
+- **Agent Best Practices**:
+  - Clear system prompts
+  - Proper tool selection logic
+  - Error handling and recovery
+  - Token usage optimization
 - **Python Standards**: Follow PEP 8 style guide
-- **TypeScript Standards**: Use strict mode, proper typing
+- **TypeScript Standards**: Use strict mode, proper typing (for ChatKit frontend)
 
 ## Technology Constraints
 
 ### Required Stack
 | Layer | Technology | Version |
 |-------|-----------|---------|
-| Frontend | Next.js (App Router) | 16+ |
+| Frontend | OpenAI ChatKit | Latest |
+| AI Agent | OpenAI Agents SDK | Latest |
+| MCP Tools | Official MCP SDK | Latest |
 | Backend | Python FastAPI | Latest |
 | ORM | SQLModel | Latest |
 | Database | Neon Serverless PostgreSQL | Latest |
-| Authentication | Better Auth | Latest |
-| API Client | Axios or Fetch | Latest |
+| Authentication | Better Auth (JWT) | Latest |
 
 ### Communication Protocols
-- **Frontend ↔ Backend**: HTTPS REST API
+- **Frontend ↔ Backend**: HTTPS REST API (chat endpoint)
+- **Backend ↔ Agent**: OpenAI Agents SDK function calling
+- **Agent ↔ Tools**: MCP protocol (function calls with schemas)
 - **Backend ↔ Database**: PostgreSQL protocol via SQLModel
 - **Authentication**: JWT tokens in Authorization header
+
+### Architecture Layers
+```
+┌─────────────────────────────────────────────────────────┐
+│ Frontend (OpenAI ChatKit)                               │
+│ - Chat UI                                               │
+│ - Message display                                       │
+│ - User input                                            │
+└─────────────────────┬───────────────────────────────────┘
+                      │ HTTPS REST API
+                      │ POST /api/chat
+                      │ Authorization: Bearer <JWT>
+┌─────────────────────▼───────────────────────────────────┐
+│ Backend (FastAPI)                                       │
+│ - JWT validation                                        │
+│ - Conversation persistence                              │
+│ - Agent orchestration                                   │
+└─────────────────────┬───────────────────────────────────┘
+                      │ OpenAI Agents SDK
+                      │ Function calling
+┌─────────────────────▼───────────────────────────────────┐
+│ AI Agent (OpenAI Agents SDK)                            │
+│ - Natural language understanding                        │
+│ - Tool selection                                        │
+│ - Response generation                                   │
+└─────────────────────┬───────────────────────────────────┘
+                      │ MCP Protocol
+                      │ Tool calls with schemas
+┌─────────────────────▼───────────────────────────────────┐
+│ MCP Tools (Official MCP SDK)                            │
+│ - create_task, update_task, delete_task, list_tasks     │
+│ - Authorization enforcement                             │
+│ - Input validation                                      │
+│ - Database operations                                   │
+└─────────────────────┬───────────────────────────────────┘
+                      │ SQLModel ORM
+                      │ Async queries
+┌─────────────────────▼───────────────────────────────────┐
+│ Database (Neon PostgreSQL)                              │
+│ - Users, Tasks, Conversations, Messages                 │
+│ - Single source of truth                                │
+└─────────────────────────────────────────────────────────┘
+```
 
 ### Environment Configuration
 - **Development**: Local `.env` file with development credentials
@@ -242,16 +300,19 @@ Code is written for production from day one. This means proper error handling, l
   - `DATABASE_URL`: Neon PostgreSQL connection string
   - `JWT_SECRET`: Secret key for JWT signing/verification
   - `BETTER_AUTH_SECRET`: Better Auth configuration secret
-  - `NEXT_PUBLIC_API_URL`: Backend API base URL (for frontend)
+  - `OPENAI_API_KEY`: OpenAI API key for agent
+  - `MCP_SERVER_URL`: MCP server endpoint (if separate)
 
 ### Prohibited Practices
 - ❌ Hardcoded secrets or credentials in source code
-- ❌ Direct database access from frontend
+- ❌ Direct database access from agent code
+- ❌ Storing conversation state in memory only
+- ❌ Agent bypassing MCP tools for data operations
+- ❌ MCP tools without authorization checks
 - ❌ Storing passwords in plaintext
-- ❌ Mixing Server and Client Components incorrectly
-- ❌ Skipping authentication checks on protected routes
 - ❌ Returning other users' data (data leakage)
 - ❌ Using deprecated APIs or patterns
+- ❌ Synchronous blocking operations in async endpoints
 
 ## Success Criteria
 
@@ -262,29 +323,50 @@ Code is written for production from day one. This means proper error handling, l
 - ✅ Tokens expire after configured duration
 - ✅ Invalid/expired tokens are rejected with 401 status
 - ✅ Users can only access their own data
+- ✅ MCP tools enforce per-user authorization
 
-### Task Management (CRUD)
-- ✅ Users can create new tasks
-- ✅ Users can view their task list
-- ✅ Users can update existing tasks
-- ✅ Users can delete tasks
-- ✅ All operations persist to database
-- ✅ All operations enforce per-user isolation
+### AI Agent Functionality
+- ✅ Agent understands natural language task requests
+- ✅ Agent correctly selects appropriate MCP tools
+- ✅ Agent creates tasks via create_task tool
+- ✅ Agent updates tasks via update_task tool
+- ✅ Agent deletes tasks via delete_task tool
+- ✅ Agent lists tasks via list_tasks tool
+- ✅ Agent provides helpful responses to user queries
+- ✅ Agent handles tool errors gracefully
 
-### API Correctness
-- ✅ All endpoints return correct status codes
-- ✅ Request validation rejects invalid data
-- ✅ Error responses include meaningful messages
-- ✅ API follows RESTful conventions
-- ✅ Protected endpoints require authentication
+### MCP Tool Correctness
+- ✅ All tools validate user ownership before operations
+- ✅ All tools validate input schemas
+- ✅ All tools return structured responses
+- ✅ Tools enforce database constraints
+- ✅ Tools use transactions for consistency
+- ✅ Tools handle errors without crashing
+- ✅ Tool catalog is discoverable by agent
+
+### Conversation Management
+- ✅ All messages persisted to database immediately
+- ✅ Conversation history loaded from database per request
+- ✅ Users can only access their own conversations
+- ✅ Message order preserved correctly
+- ✅ Conversation context maintained across requests
+- ✅ Server restart does not lose conversation state
+
+### Stateless Architecture
+- ✅ Server maintains no in-memory conversation state
+- ✅ Multiple server instances can handle same user
+- ✅ Server can be restarted without data loss
+- ✅ All state reconstructable from database
+- ✅ Horizontal scaling works correctly
 
 ### Frontend Quality
-- ✅ UI is responsive (desktop and mobile)
-- ✅ Forms have proper validation
-- ✅ Loading states are shown during API calls
-- ✅ Error messages are displayed to users
-- ✅ Navigation works correctly
-- ✅ Authentication state is managed properly
+- ✅ Chat UI renders correctly
+- ✅ Messages display in correct order
+- ✅ User input is captured and sent
+- ✅ Loading states shown during API calls
+- ✅ Error messages displayed to users
+- ✅ Authentication state managed properly
+- ✅ Streaming responses work (if implemented)
 
 ### System Quality
 - ✅ Application passes integration tests
@@ -292,6 +374,7 @@ Code is written for production from day one. This means proper error handling, l
 - ✅ Application can be deployed successfully
 - ✅ Environment configuration works correctly
 - ✅ Database migrations run successfully
+- ✅ Agent-tool integration works end-to-end
 
 ## Governance
 
@@ -318,6 +401,9 @@ This constitution supersedes all other development practices and guidelines. Whe
 - ✅ All authentication/authorization is implemented correctly
 - ✅ All user data is properly isolated
 - ✅ All secrets are in environment variables
+- ✅ All MCP tools enforce authorization
+- ✅ Agent never directly accesses database
+- ✅ All state persisted to database
 - ✅ All tests pass before deployment
 
 ### Architectural Decision Records
@@ -326,4 +412,4 @@ Significant architectural decisions must be documented in ADRs (`history/adr/`).
 - Involves multiple valid alternatives
 - Is cross-cutting and influences system design
 
-**Version**: 1.0.1 | **Ratified**: 2026-02-08 | **Last Amended**: 2026-02-15
+**Version**: 2.0.0 | **Ratified**: 2026-02-19 | **Last Amended**: 2026-02-19

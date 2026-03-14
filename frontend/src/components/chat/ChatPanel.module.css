@@ -1,0 +1,100 @@
+.chatPanel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.header {
+  padding: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  background-color: #f8f9fa;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #333;
+}
+
+.messagesContainer {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.emptyState {
+  text-align: center;
+  color: #666;
+  margin-top: 2rem;
+}
+
+.emptyState p {
+  margin: 0.5rem 0;
+}
+
+.loadingIndicator {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  color: #666;
+  font-style: italic;
+}
+
+.errorContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background-color: #f8d7da;
+  color: #721c24;
+  border-top: 1px solid #f5c6cb;
+}
+
+.errorContainer p {
+  margin: 0;
+  flex: 1;
+}
+
+.errorContainer button {
+  padding: 0.25rem 0.75rem;
+  background-color: transparent;
+  color: #721c24;
+  border: 1px solid #721c24;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.errorContainer button:hover {
+  background-color: #721c24;
+  color: white;
+}
+
+/* Mobile styles */
+@media (max-width: 767px) {
+  .chatPanel {
+    border-radius: 0.25rem;
+  }
+
+  .header {
+    padding: 0.75rem;
+  }
+
+  .header h2 {
+    font-size: 1.1rem;
+  }
+
+  .messagesContainer {
+    padding: 0.75rem;
+  }
+
+  .emptyState {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+  }
+}

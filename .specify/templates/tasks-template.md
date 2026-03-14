@@ -73,6 +73,34 @@ Examples of foundational tasks (adjust based on your project):
 
 ---
 
+## Phase 2b: Foundational (Phase-III AI Agent Infrastructure) *(if feature uses AI agent)*
+
+<!--
+  ACTION REQUIRED: For Phase-III features that involve AI agent and MCP tools,
+  add these foundational tasks. These MUST be complete before implementing
+  any user stories that require agent interaction.
+-->
+
+**Purpose**: AI agent and MCP tool infrastructure that MUST be complete before agent-driven user stories
+
+**⚠️ CRITICAL**: No agent-driven user story work can begin until this phase is complete
+
+Examples of Phase-III foundational tasks (adjust based on your project):
+
+- [ ] T010 Setup OpenAI Agents SDK integration in backend/src/agent/
+- [ ] T011 [P] Create MCP tool registry and discovery mechanism
+- [ ] T012 [P] Implement conversation persistence (Conversation and Message models)
+- [ ] T013 Create chat endpoint with JWT authentication in backend/src/api/chat.py
+- [ ] T014 Implement stateless agent invocation pattern
+- [ ] T015 [P] Setup user context passing to MCP tools
+- [ ] T016 [P] Configure agent system prompts and behavior
+- [ ] T017 Implement conversation history loading from database
+- [ ] T018 Add agent error handling and recovery logic
+
+**Checkpoint**: AI agent infrastructure ready - agent-driven user stories can now begin
+
+---
+
 ## Phase 3: User Story 1 - [Title] (Priority: P1) 🎯 MVP
 
 **Goal**: [Brief description of what this story delivers]
@@ -86,6 +114,20 @@ Examples of foundational tasks (adjust based on your project):
 - [ ] T010 [P] [US1] Contract test for [endpoint] in tests/contract/test_[name].py
 - [ ] T011 [P] [US1] Integration test for [user journey] in tests/integration/test_[name].py
 
+### Tests for User Story 1 - Phase-III Agent Testing (OPTIONAL - only if tests requested) ⚠️
+
+<!--
+  ACTION REQUIRED: For Phase-III agent-driven features, add agent-specific tests.
+  These test natural language understanding, tool selection, and response quality.
+-->
+
+> **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
+
+- [ ] T020 [P] [US1] Agent intent recognition test for [intent] in tests/agent/test_intent_[name].py
+- [ ] T021 [P] [US1] Agent tool selection test for [scenario] in tests/agent/test_tools_[name].py
+- [ ] T022 [P] [US1] Agent response quality test for [interaction] in tests/agent/test_response_[name].py
+- [ ] T023 [P] [US1] MCP tool authorization test for [tool_name] in tests/tools/test_[tool_name]_auth.py
+
 ### Implementation for User Story 1
 
 - [ ] T012 [P] [US1] Create [Entity1] model in src/models/[entity1].py
@@ -94,6 +136,58 @@ Examples of foundational tasks (adjust based on your project):
 - [ ] T015 [US1] Implement [endpoint/feature] in src/[location]/[file].py
 - [ ] T016 [US1] Add validation and error handling
 - [ ] T017 [US1] Add logging for user story 1 operations
+
+### Implementation for User Story 1 - Phase-III MCP Tools (if agent-driven) *(adjust based on plan.md)*
+
+<!--
+  ACTION REQUIRED: For Phase-III agent-driven features, add MCP tool implementation tasks.
+  Each tool should be implemented with authorization, validation, and structured responses.
+-->
+
+**MCP Tool Implementation**:
+
+- [ ] T030 [P] [US1] Implement [tool_name] MCP tool in backend/src/tools/[tool_name].py
+  - Input schema with Pydantic validation
+  - Authorization check using user_context["user_id"]
+  - Database operations with transactions
+  - Structured response (success/error)
+  - Error logging
+
+- [ ] T031 [P] [US1] Implement [tool_name] MCP tool in backend/src/tools/[tool_name].py
+  - [Same requirements as above]
+
+- [ ] T032 [US1] Register tools in MCP tool catalog (depends on T030, T031)
+  - Add tool definitions to registry
+  - Configure tool discovery for agent
+  - Verify tool schemas are valid
+
+**Agent Configuration for User Story 1**:
+
+- [ ] T033 [US1] Update agent system prompt for [intent] in backend/src/agent/prompts.py
+  - Add intent recognition patterns
+  - Define tool usage guidelines
+  - Add response templates
+
+- [ ] T034 [US1] Configure agent tool selection logic for [scenario]
+  - Map user intents to tools
+  - Define parameter extraction rules
+  - Add clarification triggers
+
+**Conversation State Management**:
+
+- [ ] T035 [US1] Implement conversation persistence for [feature] in backend/src/api/chat.py
+  - Persist user messages immediately
+  - Load conversation history from database
+  - Persist agent responses after generation
+  - Handle conversation context window
+
+**Authorization Enforcement**:
+
+- [ ] T036 [US1] Add authorization tests for [tool_name] in tests/tools/test_[tool_name]_auth.py
+  - Test valid user access
+  - Test cross-user access denial
+  - Test missing user context
+  - Test ownership verification
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
 

@@ -22,7 +22,7 @@ wheels/
 MANIFEST
 .claude/
 .gemini/
-
+OPENAI_API_KEY = "YOUR_API_KEY_HERE"
 
 # Virtual environments
 venv/
@@ -87,3 +87,4 @@ logs/
 .mypy_cache/
 .dmypy.json
 dmypy.json
+backend/src/config.py

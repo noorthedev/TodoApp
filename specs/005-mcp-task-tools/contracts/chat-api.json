@@ -1,0 +1,410 @@
+{
+  "chat_api": {
+    "version": "1.0.0",
+    "description": "Chat API Contract for AI Agent Integration",
+    "endpoint": {
+      "path": "/api/chat",
+      "method": "POST",
+      "description": "Processes user messages through AI agent with MCP tool integration. Persists conversation state to database.",
+      "authentication": "JWT Bearer token required in Authorization header"
+    },
+    "request": {
+      "headers": {
+        "Authorization": {
+          "type": "string",
+          "description": "Bearer token for user authentication",
+          "required": true,
+          "format": "Bearer <jwt_token>",
+          "example": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        },
+        "Content-Type": {
+          "type": "string",
+          "description": "Request content type",
+          "required": true,
+          "value": "application/json"
+        }
+      },
+      "body": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "User's natural language message to the AI agent",
+            "minLength": 1,
+            "maxLength": 2000,
+            "example": "Add a task to buy groceries tomorrow"
+          }
+        },
+        "required": ["message"]
+      }
+    },
+    "response": {
+      "success": {
+        "status_code": 200,
+        "description": "Agent successfully processed message and returned response",
+        "body": {
+          "type": "object",
+          "properties": {
+            "response": {
+              "type": "string",
+              "description": "AI agent's natural language response to user",
+              "example": "I've added the task 'Buy groceries tomorrow' to your list."
+            },
+            "conversation_id": {
+              "type": "integer",
+              "description": "ID of the conversation (for tracking)",
+              "example": 42
+            }
+          },
+          "required": ["response", "conversation_id"]
+        }
+      },
+      "errors": {
+        "401": {
+          "status_code": 401,
+          "description": "Authentication failed - missing, invalid, or expired JWT token",
+          "body": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "object",
+                "properties": {
+                  "status_code": {
+                    "type": "integer",
+                    "const": 401
+                  },
+                  "message": {
+                    "type": "string",
+                    "examples": [
+                      "Token has expired",
+                      "Invalid token",
+                      "Authorization header missing"
+                    ]
+                  }
+                },
+                "required": ["status_code", "message"]
+              }
+            }
+          }
+        },
+        "422": {
+          "status_code": 422,
+          "description": "Validation error - invalid request body",
+          "body": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "object",
+                "properties": {
+                  "status_code": {
+                    "type": "integer",
+                    "const": 422
+                  },
+                  "message": {
+                    "type": "string",
+                    "examples": [
+                      "Message field is required",
+                      "Message exceeds maximum length"
+                    ]
+                  }
+                },
+                "required": ["status_code", "message"]
+              }
+            }
+          }
+        },
+        "500": {
+          "status_code": 500,
+          "description": "Internal server error - agent invocation failed or database error",
+          "body": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "object",
+                "properties": {
+                  "status_code": {
+                    "type": "integer",
+                    "const": 500
+                  },
+                  "message": {
+                    "type": "string",
+                    "examples": [
+                      "Agent invocation failed",
+                      "Database connection error",
+                      "Failed to persist conversation"
+                    ]
+                  }
+                },
+                "required": ["status_code", "message"]
+              }
+            }
+          }
+        },
+        "503": {
+          "status_code": 503,
+          "description": "Service unavailable - OpenAI API timeout or failure",
+          "body": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "object",
+                "properties": {
+                  "status_code": {
+                    "type": "integer",
+                    "const": 503
+                  },
+                  "message": {
+                    "type": "string",
+                    "examples": [
+                      "AI service temporarily unavailable",
+                      "Request timeout - please try again"
+                    ]
+                  }
+                },
+                "required": ["status_code", "message"]
+              }
+            }
+          }
+        }
+      }
+    },
+    "execution_flow": {
+      "description": "Step-by-step execution flow for chat endpoint",
+      "steps": [
+        {
+          "step": 1,
+          "name": "Authentication",
+          "description": "Extract JWT from Authorization header and validate using get_current_user dependency",
+          "output": "current_user: User object with user_id and email"
+        },
+        {
+          "step": 2,
+          "name": "Request Validation",
+          "description": "Validate request body using Pydantic schema (message field required, length constraints)",
+          "output": "Validated ChatRequest object"
+        },
+        {
+          "step": 3,
+          "name": "Get or Create Conversation",
+          "description": "Query database for user's most recent conversation or create new one",
+          "database_query": "SELECT * FROM conversations WHERE user_id = ? ORDER BY updated_at DESC LIMIT 1",
+          "output": "conversation: Conversation object with conversation_id"
+        },
+        {
+          "step": 4,
+          "name": "Load Conversation History",
+          "description": "Load recent messages from conversation (last 50 messages for context)",
+          "database_query": "SELECT * FROM messages WHERE conversation_id = ? ORDER BY timestamp DESC LIMIT 50",
+          "output": "messages: List[Message] in chronological order"
+        },
+        {
+          "step": 5,
+          "name": "Persist User Message",
+          "description": "Save user's message to database before agent invocation",
+          "database_operation": "INSERT INTO messages (conversation_id, role, content, timestamp) VALUES (?, 'user', ?, NOW())",
+          "output": "user_message: Message object"
+        },
+        {
+          "step": 6,
+          "name": "Prepare Agent Context",
+          "description": "Build context for agent with conversation history and user_context",
+          "context": {
+            "conversation_history": "List of previous messages (role, content)",
+            "user_context": {
+              "user_id": "current_user.id",
+              "email": "current_user.email"
+            },
+            "session": "Database session for tool access"
+          }
+        },
+        {
+          "step": 7,
+          "name": "Invoke Agent",
+          "description": "Call OpenAI Agent with user message, history, and tool catalog",
+          "agent_config": {
+            "model": "gpt-4",
+            "tools": ["add_task", "list_tasks", "complete_task", "delete_task", "update_task"],
+            "system_prompt": "You are a helpful task management assistant...",
+            "timeout": "10 seconds"
+          },
+          "output": "agent_response: str (natural language response)"
+        },
+        {
+          "step": 8,
+          "name": "Persist Agent Response",
+          "description": "Save agent's response to database after successful invocation",
+          "database_operation": "INSERT INTO messages (conversation_id, role, content, timestamp) VALUES (?, 'assistant', ?, NOW())",
+          "output": "assistant_message: Message object"
+        },
+        {
+          "step": 9,
+          "name": "Update Conversation Timestamp",
+          "description": "Update conversation's updated_at timestamp to reflect recent activity",
+          "database_operation": "UPDATE conversations SET updated_at = NOW() WHERE id = ?",
+          "output": "Updated conversation"
+        },
+        {
+          "step": 10,
+          "name": "Return Response",
+          "description": "Return agent's response and conversation_id to frontend",
+          "response": {
+            "response": "agent_response",
+            "conversation_id": "conversation.id"
+          }
+        }
+      ]
+    },
+    "stateless_guarantees": {
+      "description": "Stateless architecture guarantees for chat endpoint",
+      "guarantees": [
+        "No in-memory conversation state - all state persisted to database",
+        "Each request loads conversation history from database",
+        "Agent has no memory between requests",
+        "Multiple server instances can handle same user's requests",
+        "Conversation state survives server restarts",
+        "Database is single source of truth for all conversation data"
+      ]
+    },
+    "authorization": {
+      "description": "Authorization enforcement for chat endpoint",
+      "rules": [
+        "JWT token MUST be validated before processing message",
+        "user_context MUST be extracted from validated JWT token",
+        "Conversation MUST be filtered by current_user.id",
+        "Messages MUST be filtered by conversation owned by current_user",
+        "MCP tools MUST receive user_context for authorization",
+        "Cross-user conversation access MUST be prevented"
+      ]
+    },
+    "performance_targets": {
+      "authentication": "<10ms",
+      "database_queries": "<50ms total (get conversation + load history)",
+      "message_persistence": "<10ms per message",
+      "agent_invocation": "1-5s (external OpenAI API)",
+      "total_request": "<5s end-to-end (dominated by agent)",
+      "concurrent_users": "100+ simultaneous users supported"
+    },
+    "error_handling": {
+      "description": "Error handling strategy for chat endpoint",
+      "strategies": [
+        {
+          "error_type": "Authentication failure",
+          "status_code": 401,
+          "action": "Return user-friendly error message, do not expose token details"
+        },
+        {
+          "error_type": "Validation error",
+          "status_code": 422,
+          "action": "Return specific validation error (field name, constraint violated)"
+        },
+        {
+          "error_type": "Database connection failure",
+          "status_code": 500,
+          "action": "Log error for monitoring, return generic error message to user"
+        },
+        {
+          "error_type": "Agent invocation timeout",
+          "status_code": 503,
+          "action": "Return user-friendly timeout message, suggest retry"
+        },
+        {
+          "error_type": "Agent invocation failure",
+          "status_code": 500,
+          "action": "Log error with request ID, return generic error message"
+        },
+        {
+          "error_type": "Message persistence failure",
+          "status_code": 500,
+          "action": "Rollback transaction, log error, return error to user"
+        }
+      ]
+    },
+    "example_requests": [
+      {
+        "name": "Create Task",
+        "request": {
+          "method": "POST",
+          "url": "/api/chat",
+          "headers": {
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+            "Content-Type": "application/json"
+          },
+          "body": {
+            "message": "Add a task to buy groceries tomorrow"
+          }
+        },
+        "response": {
+          "status": 200,
+          "body": {
+            "response": "I've added the task 'Buy groceries tomorrow' to your list.",
+            "conversation_id": 42
+          }
+        }
+      },
+      {
+        "name": "List Tasks",
+        "request": {
+          "method": "POST",
+          "url": "/api/chat",
+          "headers": {
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+            "Content-Type": "application/json"
+          },
+          "body": {
+            "message": "Show me all my tasks"
+          }
+        },
+        "response": {
+          "status": 200,
+          "body": {
+            "response": "You have 3 tasks:\n1. Buy groceries tomorrow\n2. Finish project report\n3. Call dentist",
+            "conversation_id": 42
+          }
+        }
+      },
+      {
+        "name": "Complete Task",
+        "request": {
+          "method": "POST",
+          "url": "/api/chat",
+          "headers": {
+            "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+            "Content-Type": "application/json"
+          },
+          "body": {
+            "message": "Mark 'Buy groceries' as done"
+          }
+        },
+        "response": {
+          "status": 200,
+          "body": {
+            "response": "Great! I've marked 'Buy groceries tomorrow' as completed.",
+            "conversation_id": 42
+          }
+        }
+      },
+      {
+        "name": "Authentication Error",
+        "request": {
+          "method": "POST",
+          "url": "/api/chat",
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "body": {
+            "message": "Add a task"
+          }
+        },
+        "response": {
+          "status": 401,
+          "body": {
+            "error": {
+              "status_code": 401,
+              "message": "Authorization header missing"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

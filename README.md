@@ -173,7 +173,10 @@ pip install -r requirements.txt
 
 # Configure environment
 cp .env.example .env
-# Edit .env and add your Neon database URL and JWT secret
+# Edit .env and add:
+# - DATABASE_URL: Your Neon PostgreSQL connection string
+# - JWT_SECRET: A secure random string for JWT token signing
+# - OPENAI_API_KEY: Your OpenAI API key for AI agent (Phase-III)
 
 # Start backend server
 uvicorn src.main:app --reload --host 0.0.0.0 --port 8000
@@ -181,6 +184,8 @@ uvicorn src.main:app --reload --host 0.0.0.0 --port 8000
 
 Backend will be available at: http://localhost:8000
 API Documentation: http://localhost:8000/docs
+
+**Phase-III AI Chat**: The backend now includes an AI agent that can manage tasks through natural language. The `/api/chat` endpoint accepts user messages and returns AI-generated responses. The agent uses OpenAI's GPT-4 model with MCP tools for task operations.
 
 ### 3. Frontend Setup
 

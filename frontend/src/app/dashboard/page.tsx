@@ -6,6 +6,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { useTasks } from '../../hooks/useTasks';
 import TaskForm from '../../components/tasks/TaskForm';
 import TaskList from '../../components/tasks/TaskList';
+import ChatPanel from '../../components/chat/ChatPanel';
 
 export default function DashboardPage() {
   const { user, logout } = useAuth();
@@ -25,7 +26,8 @@ export default function DashboardPage() {
   };
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '900px', margin: '0 auto' }}>
+    <div style={{ padding: '2rem', maxWidth: '1400px', margin: '0 auto' }}>
+      {/* Header */}
       <div style={{
         display: 'flex',
         justifyContent: 'space-between',
@@ -54,16 +56,47 @@ export default function DashboardPage() {
         </button>
       </div>
 
-      <TaskForm onSubmit={createTask} />
+      {/* Two-column layout: Tasks | Chat */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gap: '2rem',
+        height: 'calc(100vh - 200px)',
+      }}>
+        {/* Tasks Section */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', overflow: 'auto' }}>
+          <TaskForm onSubmit={createTask} />
+          <TaskList
+            tasks={tasks}
+            loading={loading}
+            error={error}
+            onUpdate={updateTask}
+            onDelete={deleteTask}
+            onRefresh={fetchTasks}
+          />
+        </div>
 
-      <TaskList
-        tasks={tasks}
-        loading={loading}
-        error={error}
-        onUpdate={updateTask}
-        onDelete={deleteTask}
-        onRefresh={fetchTasks}
-      />
+        {/* Chat Section */}
+        <div>
+          <ChatPanel onTaskOperation={fetchTasks} />
+        </div>
+      </div>
+
+      <style jsx>{`
+        @media (max-width: 767px) {
+          div[style*="gridTemplateColumns"] {
+            grid-template-columns: 1fr !important;
+            grid-template-rows: auto 1fr;
+            height: auto !important;
+          }
+        }
+
+        @media (min-width: 768px) and (max-width: 1023px) {
+          div[style*="gridTemplateColumns"] {
+            grid-template-columns: 2fr 3fr !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }

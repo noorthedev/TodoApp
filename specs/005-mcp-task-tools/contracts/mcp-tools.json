@@ -1,0 +1,415 @@
+{
+  "mcp_tools": {
+    "version": "1.0.0",
+    "description": "MCP Tool Contracts for Task Management",
+    "tools": [
+      {
+        "name": "add_task",
+        "description": "Creates a new task for the authenticated user. Agent should use this when user expresses intent to create, add, or remember something.",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "Task title",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "description": {
+              "type": "string",
+              "description": "Optional task description",
+              "maxLength": 1000,
+              "default": ""
+            },
+            "user_context": {
+              "type": "object",
+              "description": "Authenticated user context (automatically provided)",
+              "properties": {
+                "user_id": {
+                  "type": "integer"
+                },
+                "email": {
+                  "type": "string"
+                }
+              },
+              "required": ["user_id"]
+            },
+            "session": {
+              "type": "object",
+              "description": "Database session (automatically provided)"
+            }
+          },
+          "required": ["title", "user_context", "session"]
+        },
+        "output_schema": {
+          "type": "object",
+          "oneOf": [
+            {
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "const": true
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "task_id": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "completed": {
+                      "type": "boolean"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": ["task_id", "title", "description", "completed", "created_at"]
+                }
+              },
+              "required": ["success", "data"]
+            },
+            {
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "const": false
+                },
+                "error": {
+                  "type": "string"
+                }
+              },
+              "required": ["success", "error"]
+            }
+          ]
+        },
+        "authorization": "Tool MUST extract user_id from user_context and force it on created task. Tool MUST return error if user_context is missing or invalid."
+      },
+      {
+        "name": "list_tasks",
+        "description": "Retrieves all tasks belonging to the authenticated user. Agent should use this when user wants to see, view, or check their tasks.",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "user_context": {
+              "type": "object",
+              "description": "Authenticated user context (automatically provided)",
+              "properties": {
+                "user_id": {
+                  "type": "integer"
+                },
+                "email": {
+                  "type": "string"
+                }
+              },
+              "required": ["user_id"]
+            },
+            "session": {
+              "type": "object",
+              "description": "Database session (automatically provided)"
+            }
+          },
+          "required": ["user_context", "session"]
+        },
+        "output_schema": {
+          "type": "object",
+          "oneOf": [
+            {
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "const": true
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "tasks": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "task_id": {
+                            "type": "integer"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "completed": {
+                            "type": "boolean"
+                          },
+                          "created_at": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        }
+                      }
+                    },
+                    "count": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": ["tasks", "count"]
+                }
+              },
+              "required": ["success", "data"]
+            },
+            {
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "const": false
+                },
+                "error": {
+                  "type": "string"
+                }
+              },
+              "required": ["success", "error"]
+            }
+          ]
+        },
+        "authorization": "Tool MUST filter tasks by user_id from user_context. Tool MUST return only tasks belonging to authenticated user. Tool MUST return empty list if user has no tasks (not error)."
+      },
+      {
+        "name": "complete_task",
+        "description": "Marks a task as completed for the authenticated user. Agent should use this when user indicates a task is done, finished, or complete.",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "task_id": {
+              "type": "integer",
+              "description": "ID of task to mark as complete"
+            },
+            "user_context": {
+              "type": "object",
+              "description": "Authenticated user context (automatically provided)",
+              "properties": {
+                "user_id": {
+                  "type": "integer"
+                },
+                "email": {
+                  "type": "string"
+                }
+              },
+              "required": ["user_id"]
+            },
+            "session": {
+              "type": "object",
+              "description": "Database session (automatically provided)"
+            }
+          },
+          "required": ["task_id", "user_context", "session"]
+        },
+        "output_schema": {
+          "type": "object",
+          "oneOf": [
+            {
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "const": true
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "task_id": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "completed": {
+                      "type": "boolean",
+                      "const": true
+                    }
+                  },
+                  "required": ["task_id", "title", "completed"]
+                }
+              },
+              "required": ["success", "data"]
+            },
+            {
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "const": false
+                },
+                "error": {
+                  "type": "string"
+                }
+              },
+              "required": ["success", "error"]
+            }
+          ]
+        },
+        "authorization": "Tool MUST verify task exists before updating. Tool MUST verify task.user_id matches user_context['user_id']. Tool MUST return error if task not found or unauthorized."
+      },
+      {
+        "name": "delete_task",
+        "description": "Permanently removes a task for the authenticated user. Agent should use this when user wants to delete, remove, or discard a task.",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "task_id": {
+              "type": "integer",
+              "description": "ID of task to delete"
+            },
+            "user_context": {
+              "type": "object",
+              "description": "Authenticated user context (automatically provided)",
+              "properties": {
+                "user_id": {
+                  "type": "integer"
+                },
+                "email": {
+                  "type": "string"
+                }
+              },
+              "required": ["user_id"]
+            },
+            "session": {
+              "type": "object",
+              "description": "Database session (automatically provided)"
+            }
+          },
+          "required": ["task_id", "user_context", "session"]
+        },
+        "output_schema": {
+          "type": "object",
+          "oneOf": [
+            {
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "const": true
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "task_id": {
+                      "type": "integer"
+                    },
+                    "deleted": {
+                      "type": "boolean",
+                      "const": true
+                    }
+                  },
+                  "required": ["task_id", "deleted"]
+                }
+              },
+              "required": ["success", "data"]
+            },
+            {
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "const": false
+                },
+                "error": {
+                  "type": "string"
+                }
+              },
+              "required": ["success", "error"]
+            }
+          ]
+        },
+        "authorization": "Tool MUST verify task exists before deleting. Tool MUST verify task.user_id matches user_context['user_id']. Tool MUST return error if task not found or unauthorized. Tool MUST log deletion for audit trail."
+      },
+      {
+        "name": "update_task",
+        "description": "Modifies task title or description for the authenticated user. Agent should use this when user wants to change, edit, or update task details.",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "task_id": {
+              "type": "integer",
+              "description": "ID of task to update"
+            },
+            "title": {
+              "type": "string",
+              "description": "New task title (optional)",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "description": {
+              "type": "string",
+              "description": "New task description (optional)",
+              "maxLength": 1000
+            },
+            "user_context": {
+              "type": "object",
+              "description": "Authenticated user context (automatically provided)",
+              "properties": {
+                "user_id": {
+                  "type": "integer"
+                },
+                "email": {
+                  "type": "string"
+                }
+              },
+              "required": ["user_id"]
+            },
+            "session": {
+              "type": "object",
+              "description": "Database session (automatically provided)"
+            }
+          },
+          "required": ["task_id", "user_context", "session"]
+        },
+        "output_schema": {
+          "type": "object",
+          "oneOf": [
+            {
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "const": true
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "task_id": {
+                      "type": "integer"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "completed": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": ["task_id", "title", "description", "completed"]
+                }
+              },
+              "required": ["success", "data"]
+            },
+            {
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "const": false
+                },
+                "error": {
+                  "type": "string"
+                }
+              },
+              "required": ["success", "error"]
+            }
+          ]
+        },
+        "authorization": "Tool MUST verify task exists before updating. Tool MUST verify task.user_id matches user_context['user_id']. Tool MUST return error if task not found or unauthorized. Tool MUST validate at least one field (title or description) is provided."
+      }
+    ]
+  }
+}
